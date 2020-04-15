@@ -1,14 +1,12 @@
-addons:
-  postgresql: "10"
-  apt:
-    packages:
-    - postgresql-10
-    - postgresql-client-10
+env:
+  - POSTGRESQL_VERSION=9.6
+  - POSTGRESQL_VERSION=10
+  - POSTGRESQL_VERSION=11
+  - POSTGRESQL_VERSION=12
 before_install:
   - "echo '--colour' > ~/.rspec"
   - "echo 'gem: --no-document' > ~/.gemrc"
-  - git config --global user.name "Travis CI"
-  - git config --global user.email "travis-ci@example.com"
+  - bin/travis_db_setup
 branches:
   only:
     - master
@@ -19,9 +17,10 @@ language:
 notifications:
   email: false
 rvm:
+  - 2.3
+  - 2.4
   - 2.6
   - 2.5
-  - 2.4
 gemfile:
   - gemfiles/rails42.gemfile
   - gemfiles/rails50.gemfile
@@ -33,7 +32,11 @@ matrix:
   allow_failures:
     - gemfile: gemfiles/rails_edge.gemfile
   exclude:
-    - rvm: 2.4
+    - rvm: 2.3
+      gemfile: gemfiles/rails60.gemfile
+    - rvm: 2.3
       gemfile: gemfiles/rails_edge.gemfile
     - rvm: 2.4
       gemfile: gemfiles/rails60.gemfile
+    - rvm: 2.4
+      gemfile: gemfiles/rails_edge.gemfile
